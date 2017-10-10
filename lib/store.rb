@@ -1,5 +1,6 @@
 class Store < ActiveRecord::Base
   has_many :employees
+
   validates :name,
     presence: true,
     length: { minimum: 3}
@@ -10,9 +11,10 @@ class Store < ActiveRecord::Base
     }
   validate :must_sell_one_of_mens_or_womens
 
-  def must_sell_one_of_mens_or_womens
-    if (mens_apparel.blank? || mens_apparel == false) && (womens_apparel.blank? || womens_apparel == false)
-      errors.add(:base, 'A store must sell at least one type of apparel')
+  private
+    def must_sell_one_of_mens_or_womens
+      if (mens_apparel.blank? || mens_apparel == false) && (womens_apparel.blank? || womens_apparel == false)
+        errors.add(:base, 'A store must sell at least one type of apparel')
+      end
     end
-  end
 end

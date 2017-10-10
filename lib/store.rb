@@ -11,10 +11,20 @@ class Store < ActiveRecord::Base
     }
   validate :must_sell_one_of_mens_or_womens
 
+  before_destroy :do_not_destroy_with_employees, prepend: true
+
   private
-    def must_sell_one_of_mens_or_womens
-      if (mens_apparel.blank? || mens_apparel == false) && (womens_apparel.blank? || womens_apparel == false)
-        errors.add(:base, 'A store must sell at least one type of apparel')
-      end
+
+  def must_sell_one_of_mens_or_womens
+    if (mens_apparel.blank? || mens_apparel == false) && (womens_apparel.blank? || womens_apparel == false)
+      errors.add(:base, 'A store must sell at least one type of apparel')
     end
+  end
+
+  def do_not_destroy_with_employees
+    if self.employees.size > 0
+      errors.add(:base, 'Cannot destroy store with employees!')
+      throw :abort
+    end
+  end
 end

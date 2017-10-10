@@ -18,5 +18,4 @@ puts "----------"
 )
 
 @employee.save
-
 puts "Employee password: #{@employee.password}"
